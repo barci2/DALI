@@ -73,6 +73,7 @@ class DLL_PUBLIC FileStream {
   virtual void Close() = 0;
   virtual size_t Read(uint8_t *buffer, size_t n_bytes) = 0;
   virtual shared_ptr<void> Get(size_t n_bytes) = 0;
+  virtual bool CanShareData(size_t n_bytes) = 0;
   virtual void Seek(int64 pos) = 0;
   virtual size_t Size() const = 0;
   virtual ~FileStream() {}

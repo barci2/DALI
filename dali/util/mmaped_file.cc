@@ -177,9 +177,8 @@ void MmapedFileStream::Seek(int64 pos) {
 
 // This method saves a memcpy
 shared_ptr<void> MmapedFileStream::Get(size_t n_bytes) {
-  if (pos_ + n_bytes > length_) {
-    return nullptr;
-  }
+  DALI_ENFORCE(pos_ + n_bytes > length_,
+               "MmapedFileStream could not get the requested amount of data");
   auto tmp = p_;
   shared_ptr<void> p(ReadAheadHelper(p_, pos_, n_bytes, !read_ahead_whole_file_),
     [tmp](void*) {
@@ -194,6 +193,10 @@ shared_ptr<void> MmapedFileStream::Get(size_t n_bytes) {
   });
   pos_ += n_bytes;
   return p;
+}
+
+inline bool MmapedFileStream::CanShareData(size_t n_bytes) {
+  return pos_ + n_bytes > length_;
 }
 
 size_t MmapedFileStream::Read(uint8_t * buffer, size_t n_bytes) {

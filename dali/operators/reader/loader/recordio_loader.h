@@ -117,9 +117,9 @@ class RecordIOLoader : public IndexedFileLoader {
     }
     while (p == nullptr && n_read < size) {
       if (!use_read) {
-        p = current_file_->Get(size);
         // file is divided between two files, we need to fallback to read here
-        if (p == nullptr) {
+        if (!current_file_->CanShareData(size)) {
+          p = nullptr;
           if (tensor.shares_data()) {
             tensor.Reset();
           }
@@ -127,6 +127,7 @@ class RecordIOLoader : public IndexedFileLoader {
           tensor.set_type(TypeInfo::Create<uint8_t>());
           use_read = true;
         } else {
+          p = current_file_->Get(size);
           n_read = size;
           // Wrap the raw data in the Tensor object.
           tensor.ShareData(p, size, {size});

@@ -181,8 +181,13 @@ size_t StdCUFileStream::Read(uint8_t* cpu_buffer, size_t n_bytes) {
 shared_ptr<void> StdCUFileStream::Get(size_t n_bytes) {
   // this function should return a pointer inside mmaped file
   // it doesn't make sense in case of StdCUFileStream
-  return {};
+  DALI_FAIL("StdFileSteam does not support 'FileStream::Get'");
 }
+
+bool StdCUFileStream::CanShareData(size_t) {
+  return false;
+}
+
 
 size_t StdCUFileStream::Size() const {
   return length_;

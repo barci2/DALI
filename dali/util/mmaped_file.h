@@ -29,6 +29,7 @@ class MmapedFileStream : public FileStream {
   explicit MmapedFileStream(const std::string& path, bool read_ahead);
   void Close() override;
   shared_ptr<void> Get(size_t n_bytes) override;
+  bool CanShareData(size_t n_bytes) override;
   static bool ReserveFileMappings(unsigned int num);
   static void FreeFileMappings(unsigned int num);
   size_t Read(uint8_t * buffer, size_t n_bytes) override;

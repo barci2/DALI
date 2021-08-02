@@ -49,7 +49,11 @@ size_t StdFileStream::Read(uint8_t* buffer, size_t n_bytes) {
 shared_ptr<void> StdFileStream::Get(size_t /*n_bytes*/) {
   // this unction should return a pointer inside mmaped file
   // it doesn't make sense in case of StdFileStream
-  return {};
+  DALI_FAIL("StdFileSteam does not support 'FileStream::Get'");
+}
+
+bool StdFileStream::CanShareData(size_t) {
+  return false;
 }
 
 size_t StdFileStream::Size() const {

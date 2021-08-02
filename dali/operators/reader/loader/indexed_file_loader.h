@@ -73,8 +73,9 @@ class IndexedFileLoader : public Loader<CPUBackend, Tensor<CPUBackend>> {
     next_seek_pos_ = seek_pos + size;
 
     if (!copy_read_data_) {
+      DALI_ENFORCE(current_file_->CanShareData(size), 
+                   "Error reading from a file " + uris_[current_file_index_]);
       auto p = current_file_->Get(size);
-      DALI_ENFORCE(p != nullptr, "Error reading from a file " + uris_[current_file_index_]);
       // Wrap the raw data in the Tensor object.
       tensor.ShareData(p, size, {size});
       tensor.set_type(TypeInfo::Create<uint8_t>());
